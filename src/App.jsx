@@ -5,6 +5,7 @@ import Tickets from './components/Tickets';
 import Estadisticas from './components/Estadisticas';
 import Opciones from './components/Opciones';
 import Login from './components/Login';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -12,6 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         
+        {/* Ruta para Registro */}
+        <Route path="/registro" element={<Register />} />
         {/* Ruta para Dashboard */}
         <Route
           path="/dashboard"

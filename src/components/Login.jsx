@@ -21,6 +21,10 @@ const Login = () => {
       setErrorMessage('Credenciales incorrectas. Inténtalo de nuevo.');
     }
   };
+  
+  const redirectToRegister = () => {
+    navigate('/registro');
+  };
 
   return (
     <div className="login-container">
@@ -42,6 +46,7 @@ const Login = () => {
           className="login-input"
         />
         <button type="submit" className="login-button">Iniciar sesión</button>
+        <button type="button" className="register-button" onClick={redirectToRegister}>Registrarse</button>
       </form>
     </div>
   );
