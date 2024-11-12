@@ -6,7 +6,7 @@ const Register = () => {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
-  const [role, setRole] = useState('');
+  //const [role, setRole] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const Register = () => {
         contrasena,
         role: 'user',
       });
+      console.log('Usuario creado:', response.data);
       setSuccessMessage('Usuario creado con éxito');
       setErrorMessage('');
       setTimeout(() => navigate('/dashboard'), 2000); // Redirige al dashboard después de 2 segundos
