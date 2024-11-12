@@ -1,5 +1,5 @@
 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -10,10 +10,10 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <Link to="/dashboard">Dashboard</Link>
-      <Link to="/tickets">Tickets</Link>
-      <Link to="/estadisticas">Estadísticas</Link>
-      <Link to="/opciones">Opciones</Link>
+      <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+      <button onClick={() => navigate("/tickets")}>Tickets</button>
+      <button onClick={() => navigate("/estadisticas")}>Estadísticas</button>
+      <button onClick={() => navigate("/opciones")}>Opciones</button>
       <button onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );

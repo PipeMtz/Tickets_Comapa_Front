@@ -11,10 +11,14 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await axios.post('http://localhost:3000/api/auth/login', {
         email,
         contrasena,
       });
+      const token = response.data.token;
+      console.log('Token:', token); 
+      localStorage.setItem('token', token);
+
       navigate('/dashboard');
     } catch (error) {
       console.error('Error al iniciar sesión:', error);

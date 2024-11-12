@@ -71,7 +71,7 @@ const Register = () => {
           className="register-input"
         /> */}
         <button type="submit" className="register-button">Registrar</button>
-        <button type="button" className="back-button" onClick={redirectToLogin}>Regresar</button>
+        <button type="button" className="cancel-button" onClick={redirectToLogin}>Cancelar</button>
       </form>
     </div>
   );

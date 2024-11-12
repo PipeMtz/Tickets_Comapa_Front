@@ -4,8 +4,11 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(255, 255, 255, 0.87); 
+  /* color: #242424;  */
   background-color: #242424;
+  /* background-color: rgba(255, 255, 255, 0.87);  */
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -83,7 +86,7 @@ button:focus-visible {
 }
 
 .sidebar button {
-  margin-top: auto;
+  /* margin-top: auto; */
   color: white;
   background-color: #333;
   border: none;
@@ -197,8 +200,10 @@ h2 {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  width: 100vw;
   background-color: #242424;
 }
+
 
 /* Estilos del formulario de registro */
 .register-form {
@@ -219,7 +224,7 @@ h2 {
 
 /* Input del formulario de registro */
 .register-input {
-  width: 100%;
+  width: 90%;
   padding: 0.8rem;
   margin: 0.5rem 0;
   border-radius: 4px;
@@ -246,6 +251,24 @@ h2 {
   background-color: #535bf2;
 }
 
+.cancel-button{
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background-color: #fff;
+  color: #646cff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #dcdcdc;
+  color: #e43030;
+}
+
 /* Mensaje de éxito */
 .success-message {
   color: #4CAF50;
@@ -260,6 +283,78 @@ h2 {
   margin-bottom: 1rem;
 }
 
+/* TICKETS */
+/* Estilos generales para el formulario de ticket */
+.ticket-form {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.ticket-form h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.ticket-form textarea,
+.ticket-form input[type="text"],
+.ticket-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.ticket-form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.ticket-form select {
+  height: 40px;
+  background-color: #fff;
+  color: #333;
+}
+
+.ticket-form button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ticket-form button:hover {
+  background-color: #0056b3;
+}
+
+.ticket-form input:focus,
+.ticket-form textarea:focus,
+.ticket-form select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.ticket-form input::placeholder,
+.ticket-form textarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
 
 
 @media (prefers-color-scheme: light) {

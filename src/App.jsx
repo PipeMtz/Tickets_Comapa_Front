@@ -6,6 +6,7 @@ import Estadisticas from './components/Estadisticas';
 import Opciones from './components/Opciones';
 import Login from './components/Login';
 import Register from './components/Register';
+import SubirTicket from './components/SubirTicket';
 
 function App() {
   return (
@@ -36,6 +37,18 @@ function App() {
               <Sidebar />
               <main className="main-content">
                 <Tickets />
+              </main>
+            </div>
+          }
+        />
+        {/* Ruta para Subir Tickets */}
+        <Route
+          path="/subir-tickets"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <main className="main-content">
+                <SubirTicket />
               </main>
             </div>
           }
