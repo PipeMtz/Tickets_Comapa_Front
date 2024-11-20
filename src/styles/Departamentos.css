@@ -1,0 +1,61 @@
+.departamentos-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .crear-departamento {
+    margin-bottom: 20px;
+  }
+  
+  .crear-departamento input {
+    padding: 8px;
+    font-size: 14px;
+    margin-right: 10px;
+    width: 300px;
+  }
+  
+  .crear-departamento button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #313aee;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .crear-departamento button:hover {
+    background-color: #242ec5;
+  }
+  
+  .departamentos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .departamentos-table th,
+  .departamentos-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .departamentos-table th {
+    background-color: #313aee;
+    color: white;
+  }
+  
+  .btn-eliminar {
+    padding: 4px 8px;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-eliminar:hover {
+    background-color: #cc3c3e;
+  }
+  

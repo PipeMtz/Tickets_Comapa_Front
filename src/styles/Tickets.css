@@ -1,0 +1,30 @@
+.tickets-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.tickets-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tickets-table th,
+.tickets-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.tickets-table th {
+  background-color: #313aee;
+  font-weight: bold;
+  color: white;
+}
+
+.tickets-table td {
+  color: #fff;
+  background-color: #333; /* Fondo blanco para celdas */
+}

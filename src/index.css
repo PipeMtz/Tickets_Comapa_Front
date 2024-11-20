@@ -102,7 +102,7 @@ button:focus-visible {
 .main-content {
   flex: 1;
   padding: 2rem;
-  background-color: #333333;
+  background-color: #ffffff;
   color: rgba(255, 255, 255, 0.87);
   width: 80vw;
   overflow-y: auto;
@@ -110,7 +110,7 @@ button:focus-visible {
 
 h2 {
   font-size: 2rem;
-  color: #ffffff;
+  color: #000000;
   margin-bottom: 1rem;
 }
 

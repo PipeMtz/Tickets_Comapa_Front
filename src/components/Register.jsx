@@ -18,7 +18,7 @@ const Register = () => {
         nombre,
         email,
         contrasena,
-        role: 'user',
+        role: 'Usuario',
       });
       console.log('Usuario creado:', response.data);
       setSuccessMessage('Usuario creado con éxito');

@@ -7,6 +7,10 @@ import Opciones from './components/Opciones';
 import Login from './components/Login';
 import Register from './components/Register';
 import SubirTicket from './components/SubirTicket';
+import Usuarios from './components/Usuarios';
+import Departamentos from './components/Departamentos';
+import Roles from './components/Roles';
+// import './index.css';
 
 function App() {
   return (
@@ -31,12 +35,24 @@ function App() {
 
         {/* Ruta para Tickets */}
         <Route
-          path="/tickets"
+          path="/solicitudes"
           element={
             <div className="app-container">
               <Sidebar />
               <main className="main-content">
                 <Tickets />
+              </main>
+            </div>
+          }
+        />
+        {/* Ruta para Usuarios */}
+        <Route
+          path="/usuarios"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <main className="main-content">
+                <Usuarios />
               </main>
             </div>
           }
@@ -62,6 +78,30 @@ function App() {
               <Sidebar />
               <main className="main-content">
                 <Estadisticas />
+              </main>
+            </div>
+          }
+        />
+        {/* Ruta para Departamentos */}
+        <Route
+          path="/departamentos"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <main className="main-content">
+                <Departamentos />
+              </main>
+            </div>
+          }
+        />
+        {/* Ruta para Roles */}
+        <Route
+          path="/roles"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <main className="main-content">
+                <Roles />
               </main>
             </div>
           }
