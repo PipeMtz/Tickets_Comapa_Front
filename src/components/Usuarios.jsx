@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
+import { Table, Button, Modal, Select, Form, Typography, Space, Row, Col } from 'antd';
 import axios from 'axios';
-import Modal from 'react-modal'; // Importar modal
-import Select from 'react-select'; // Importar react-select para dropdowns
-import '../styles/Usuarios.css';
+import moment from 'moment';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-// Configurar el modal para que funcione en cualquier parte de la aplicación
-Modal.setAppElement('#root'); 
+const { Text } = Typography;
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -13,10 +12,8 @@ const Usuarios = () => {
   const [roles, setRoles] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-  const [nuevoDepartamento, setNuevoDepartamento] = useState(null);
-  const [nuevoRol, setNuevoRol] = useState(null);
+  const [form] = Form.useForm();
 
-  // Fetch de usuarios, departamentos y roles
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,52 +29,47 @@ const Usuarios = () => {
         console.error('Error al cargar los datos:', error);
       }
     };
-
     fetchData();
   }, []);
 
-  // Abrir modal de edición
   const abrirModal = (usuario) => {
     setUsuarioSeleccionado(usuario);
-    setNuevoDepartamento(usuario.nombre_departamento || '');
-    setNuevoRol(usuario.roles || '');
+    form.setFieldsValue({
+      nuevoDepartamento: usuario.nombre_departamento,
+      nuevoRol: usuario.roles,
+    });
     setModalVisible(true);
   };
 
-  // Cerrar modal
   const cerrarModal = () => {
+    form.resetFields();
     setUsuarioSeleccionado(null);
     setModalVisible(false);
   };
 
-  // Actualizar usuario
   const actualizarUsuario = async () => {
-    if (!usuarioSeleccionado) return;
-
     try {
+      const values = form.getFieldsValue();
       await axios.put(`http://localhost:3000/api/users/${usuarioSeleccionado.id_usuario}/actualizar`, {
-        nuevoDepartamento: nuevoDepartamento,
-        nuevoRol: nuevoRol,
+        nuevoDepartamento: values.nuevoDepartamento,
+        nuevoRol: values.nuevoRol,
       });
 
-      // Actualizamos el estado de los usuarios
       setUsuarios((prevUsuarios) =>
         prevUsuarios.map((usuario) =>
           usuario.id_usuario === usuarioSeleccionado.id_usuario
-            ? { ...usuario, nombre_departamento: nuevoDepartamento, roles: nuevoRol }
+            ? { ...usuario, nombre_departamento: values.nuevoDepartamento, roles: values.nuevoRol }
             : usuario
         )
       );
-      cerrarModal(); // Cierra el modal de edición
+      cerrarModal();
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
     }
   };
 
-  // Eliminar usuario
   const eliminarUsuario = async (id_usuario) => {
     if (!window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) return;
-
     try {
       await axios.delete(`http://localhost:3000/api/users/${id_usuario}`);
       setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.id_usuario !== id_usuario));
@@ -86,80 +78,118 @@ const Usuarios = () => {
     }
   };
 
+  const columns = [
+    {
+      title: 'ID Usuario',
+      dataIndex: 'id_usuario',
+      key: 'id_usuario',
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'nombre_usuario',
+      key: 'nombre_usuario',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Teléfono',
+      dataIndex: 'telefono',
+      key: 'telefono',
+      render: (telefono) => telefono || 'N/A',
+    },
+    {
+      title: 'Departamento',
+      dataIndex: 'nombre_departamento',
+      key: 'nombre_departamento',
+      render: (dep) => dep || 'Sin asignar',
+    },
+    {
+      title: 'Rol',
+      dataIndex: 'roles',
+      key: 'roles',
+      render: (rol) => rol || 'Sin roles',
+    },
+    {
+      title: 'Fecha de Registro',
+      dataIndex: 'fecha_registro',
+      key: 'fecha_registro',
+      render: (fecha) => moment(fecha).format('DD/MM/YYYY'),
+    },
+    {
+      title: 'Opciones',
+      key: 'opciones',
+      render: (_, usuario) => (
+        <Space>
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => abrirModal(usuario)}
+          >
+            Editar
+          </Button>
+          <Button
+            type="danger"
+            icon={<DeleteOutlined />}
+            onClick={() => eliminarUsuario(usuario.id_usuario)}
+          >
+            Borrar
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <div className="usuarios-container">
       <h2>Lista de Usuarios</h2>
+      <Table
+        dataSource={usuarios}
+        columns={columns}
+        rowKey="id_usuario"
+        pagination={{ pageSize: 20 }}
+        bordered
+      />
 
-      <table className="usuarios-table">
-        <thead>
-          <tr>
-            <th>ID Usuario</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Departamento</th>
-            <th>Rol</th>
-            <th>Fecha de Registro</th>
-            <th>Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuarios.map((usuario) => (
-            <tr key={usuario.id_usuario}>
-              <td>{usuario.id_usuario}</td>
-              <td>{usuario.nombre_usuario}</td>
-              <td>{usuario.email}</td>
-              <td>{usuario.telefono || 'N/A'}</td>
-              <td>{usuario.nombre_departamento || 'Sin asignar'}</td>
-              <td>{usuario.roles || 'Sin roles'}</td>
-              <td>{new Date(usuario.fecha_registro).toLocaleDateString()}</td>
-              <td>
-                <div className="opciones-dropdown">
-                  <button>⋮</button>
-                  <div className="dropdown-menu">
-                    <button onClick={() => abrirModal(usuario)}>Editar</button>
-                    <button onClick={() => eliminarUsuario(usuario.id_usuario)}>Borrar</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Modal con React Modal */}
       <Modal
-        isOpen={modalVisible}
-        onRequestClose={cerrarModal}
-        contentLabel="Editar Usuario"
-        className="modal-content"
-        overlayClassName="modal-overlay"
+        title="Editar Usuario"
+        visible={modalVisible}
+        onCancel={cerrarModal}
+        onOk={form.submit}
+        okText="Guardar"
+        cancelText="Cancelar"
       >
-        <h3>Editar Usuario</h3>
-        <div className="modal-body">
-          <label>
-            Departamento:
-            <Select
-              options={departamentos.map((dep) => ({ value: dep.nombre_departamento, label: dep.nombre_departamento }))}
-              value={nuevoDepartamento ? { value: nuevoDepartamento, label: nuevoDepartamento } : null}
-              onChange={(e) => setNuevoDepartamento(e.value)}
-            />
-          </label>
+        <Form form={form} onFinish={actualizarUsuario} layout="vertical">
+          <Form.Item
+            label="Departamento"
+            name="nuevoDepartamento"
+            rules={[{ required: true, message: 'El departamento es obligatorio' }]}
+          >
+            <Select placeholder="Seleccione un departamento">
+              {departamentos.map((dep) => (
+                <Select.Option key={dep.nombre_departamento} value={dep.nombre_departamento}>
+                  {dep.nombre_departamento}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-          <label>
-            Rol:
-            <Select
-              options={roles.map((rol) => ({ value: rol.nombre_rol, label: rol.nombre_rol }))}
-              value={nuevoRol ? { value: nuevoRol, label: nuevoRol } : null}
-              onChange={(e) => setNuevoRol(e.value)}
-            />
-          </label>
-
-          <div className="modal-buttons">
-            <button onClick={actualizarUsuario}>Guardar</button>
-            <button onClick={cerrarModal}>Cancelar</button>
-          </div>
-        </div>
+          <Form.Item
+            label="Rol"
+            name="nuevoRol"
+            rules={[{ required: true, message: 'El rol es obligatorio' }]}
+          >
+            <Select placeholder="Seleccione un rol">
+              {roles.map((rol) => (
+                <Select.Option key={rol.nombre_rol} value={rol.nombre_rol}>
+                  {rol.nombre_rol}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

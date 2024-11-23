@@ -1,0 +1,48 @@
+/* Centrado del contenedor principal */
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  body{
+    display: flex;
+    width: 100vw;
+  }
+
+
+
+  /* Título principal */
+  .login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Ajustes del formulario */
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  /* Mensaje de error */
+  .ant-alert {
+    margin-bottom: 20px;
+  }
+  
+  /* Botones principales */
+  /* .ant-btn-primary {
+    width: 100%;
+  } */
+  
+  /* Botón de registro */
+  .register-button {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Espaciado adicional */
+  .login-container .ant-space {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
