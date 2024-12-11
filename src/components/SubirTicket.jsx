@@ -34,45 +34,86 @@ const SubirTicket = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!descripcion || !direccion || !asunto) {
       message.error('Por favor completa todos los campos obligatorios');
       return;
     }
-
+  
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         message.error('Token no encontrado');
         return;
       }
-
+  
       // Datos del ticket
       const ticketData = {
         descripcion,
         direccion,
         asunto,
       };
-
-      // Enviar el ticket
-      const response = await axios.post('http://localhost:3000/api/tickets', ticketData, {
+      console.log('Datos del ticket:', ticketData);
+  
+      // Enviar los datos del ticket
+      const ticketResponse = await axios.post('http://localhost:3000/api/tickets', ticketData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-
-      const idTicket = response.data.id_ticket;
-
-      // Subir archivos solo si hay archivos seleccionados
+  
+      // Obtener todos los tickets para buscar el ID del ticket recién creado
+      const ticketsResponse = await axios.get('http://localhost:3000/api/tickets', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const tickets = ticketsResponse.data;
+      console.log('Tickets:', tickets);
+  
+      // Normalizar cadenas para comparación
+      const normalizeString = (str) => str.trim().toLowerCase();
+  
+      let idTicket = null;
+  
+      // Usar forEach para recorrer todos los tickets y encontrar el que coincida
+      tickets.forEach((ticket) => {
+        // console.log('Comparando:', {
+        //   descripcionBackend: normalizeString(ticket.descripcion),
+        //   descripcionFrontend: normalizeString(ticketData.descripcion),
+        //   direccionBackend: normalizeString(ticket.direccion),
+        //   direccionFrontend: normalizeString(ticketData.direccion)
+        // });
+  
+        if (
+          normalizeString(ticket.descripcion) === normalizeString(ticketData.descripcion) &&
+          normalizeString(ticket.direccion) === normalizeString(ticketData.direccion) 
+          // &&
+          // ticket.asunto === ticketData.asunto
+        ) {
+          idTicket = ticket.id_ticket;
+        }
+      });
+  
+      if (!idTicket) {
+        message.error('No se pudo encontrar el ticket recién creado');
+        return;
+      }
+  
+      console.log('ID del ticket encontrado:', idTicket);
+  
+      // Subir archivos si hay archivos seleccionados
       if (archivos.length > 0) {
         for (let archivo of archivos) {
+          console.log('Subiendo archivo:', archivo);
           const archivoFormData = new FormData();
           archivoFormData.append('id_ticket', idTicket);
           archivoFormData.append('nombre', archivo.name);
           archivoFormData.append('tipo', archivo.type);
-          archivoFormData.append('base64', archivo);
-
+          archivoFormData.append('base64', archivo); // El archivo binario
+  
           await axios.post('http://localhost:3000/api/archivos/subir', archivoFormData, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -81,7 +122,7 @@ const SubirTicket = () => {
           });
         }
       }
-
+  
       message.success('Ticket enviado con éxito');
       setDescripcion('');
       setDireccion('');
@@ -92,6 +133,8 @@ const SubirTicket = () => {
       message.error('Hubo un error al enviar el ticket');
     }
   };
+  
+  
 
   const handleFileChange = (info) => {
     setArchivos(info.fileList.map((file) => file.originFileObj));
@@ -99,7 +142,7 @@ const SubirTicket = () => {
 
   return (
     <Form layout="vertical" onSubmitCapture={handleSubmit} className="ticket-form">
-      <h2>Subir Ticket</h2>
+      <h2>Enviar Solicitud</h2>
 
       <Form.Item label="Descripción de la queja" required>
         <TextArea

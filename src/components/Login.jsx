@@ -4,6 +4,7 @@ import { Form, Input, Button, Typography, Alert, Space } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import '../styles/Login.css';
+import comapaLogo from '../assets/comapalogo.png';  // Asegúrate de tener el logo en la carpeta 'assets'
 
 const { Title } = Typography;
 
@@ -35,7 +36,31 @@ const Login = () => {
   };
 
   return (
-    <div id='root-login' style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
+    <div
+      id='root-login'
+      style={{
+        maxWidth: '400px',
+        margin: '0 auto',
+        padding: '20px',
+        backgroundColor: 'white', // Fondo blanco para todo
+      }}
+    >
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        {/* Logo con fondo guinda */}
+        <div
+          style={{
+            backgroundColor: '#800000', // Fondo guinda
+            padding: '20px',
+            borderRadius: '8px',
+          }}
+        >
+          <img
+            src={comapaLogo}
+            alt="Comapa Logo"
+            style={{ maxWidth: '80%', height: 'auto' }}
+          />
+        </div>
+      </div>
       <Title level={2} style={{ textAlign: 'center', marginBottom: '20px' }}>
         Iniciar Sesión
       </Title>
@@ -62,6 +87,7 @@ const Login = () => {
           <Input
             prefix={<UserOutlined />}
             placeholder="Email"
+            style={{ borderRadius: '5px' }}
           />
         </Form.Item>
 
@@ -73,6 +99,7 @@ const Login = () => {
           <Input.Password
             prefix={<LockOutlined />}
             placeholder="Contraseña"
+            style={{ borderRadius: '5px' }}
           />
         </Form.Item>
 
@@ -81,7 +108,12 @@ const Login = () => {
             type="primary"
             htmlType="submit"
             loading={loading}
-            style={{ width: '100%' }}
+            style={{
+              width: '100%',
+              borderRadius: '5px',
+              backgroundColor: '#b30000', // Color guinda más claro para el botón
+              borderColor: '#b30000', // Aseguramos que el borde también sea guinda
+            }}
           >
             Iniciar sesión
           </Button>
@@ -89,7 +121,7 @@ const Login = () => {
       </Form>
       <Space style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
         <Typography.Text>¿No tienes una cuenta?</Typography.Text>
-        <Button type="link" onClick={redirectToRegister}>
+        <Button type="link" onClick={redirectToRegister} style={{ color: 'black' }}>
           Registrarse
         </Button>
       </Space>

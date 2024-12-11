@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardOutlined, FileTextOutlined, UserOutlined, BarChartOutlined, ApartmentOutlined, TeamOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
+import '../styles/Sidebar.css';
+import comapaLogo from '../assets/comapalogo.png';
+
 const { Sider } = Layout;
 const { Title, Text } = Typography;
 
@@ -41,21 +44,33 @@ const Sidebar = () => {
     navigate('/');
   };
 
+  const guindaColor = '#800000'; // Define el color guinda
+
   return (
     <Sider width={200} style={{ height: '100vh', background: '#fff' }}>
-      <div className="sidebar-header">
-        <Title level={3} style={{ textAlign: 'center' }}>Comapa Quejas</Title>
+      <div className="sidebar-header" style={{ backgroundColor: guindaColor, padding: '16px' }}>
+        <img 
+          src={comapaLogo} 
+          alt="Comapa Logo" 
+          style={{ maxWidth: '100%', height: 'auto' }} 
+        />
         {loading ? (
           <Spin tip="Cargando..." style={{ display: 'block', textAlign: 'center', marginTop: 10 }} />
         ) : (
-          <Text style={{ textAlign: 'center', display: 'block', fontSize: '12px' }}>Bienvenido, {userName || 'Usuario'}</Text>
+          <Text style={{ textAlign: 'center', display: 'block', fontSize: '12px', color: 'white' }}>
+            Bienvenido, {userName || 'Usuario'}
+          </Text>
         )}
       </div>
 
       <Menu
         mode="inline"
         defaultSelectedKeys={['1']}
-        style={{ height: 'calc(100% - 130px)', borderRight: 0 }} // Ajustamos la altura para dejar espacio para el encabezado
+        style={{
+          height: 'calc(100% - 130px)', 
+          borderRight: 0,
+          backgroundColor: '#fff', // Fondo blanco para el menú
+        }} 
         onClick={({ key }) => {
           if (key === 'logout') {
             handleLogout();
@@ -66,46 +81,45 @@ const Sidebar = () => {
         items={[
           {
             key: '/dashboard',
-            icon: <DashboardOutlined />,
-            label: 'Dashboard',
+            icon: <DashboardOutlined style={{ color: guindaColor }} />,
+            label: 'Menú Principal',
           },
           {
             key: '/solicitudes',
-            icon: <FileTextOutlined />,
+            icon: <FileTextOutlined style={{ color: guindaColor }} />,
             label: 'Solicitudes',
           },
           {
             key: '/usuarios',
-            icon: <UserOutlined />,
+            icon: <UserOutlined style={{ color: guindaColor }} />,
             label: 'Usuarios',
           },
           {
             key: '/estadisticas',
-            icon: <BarChartOutlined />,
+            icon: <BarChartOutlined style={{ color: guindaColor }} />,
             label: 'Estadísticas',
           },
           {
             key: '/departamentos',
-            icon: <ApartmentOutlined />,
+            icon: <ApartmentOutlined style={{ color: guindaColor }} />,
             label: 'Departamentos',
           },
           {
             key: '/roles',
-            icon: <TeamOutlined />,
+            icon: <TeamOutlined style={{ color: guindaColor }} />,
             label: 'Roles',
-          },
-          {
-            key: 'logout',
-            icon: <LogoutOutlined />,
-            label: 'Cerrar sesión',
           },
         ]}
       />
 
-      <div className="sidebar-footer">
+      <div className="sidebar-footer" style={{ marginTop: 'auto' }}>
         <Menu
           mode="inline"
-          style={{ position: 'absolute', bottom: 0, width: '100%', borderRight: 0 }}
+          style={{
+            width: '100%', 
+            borderRight: 0, 
+            backgroundColor: '#fff', // Fondo blanco para el pie de página
+          }}
           onClick={({ key }) => {
             if (key === 'logout') {
               handleLogout();
@@ -116,12 +130,12 @@ const Sidebar = () => {
           items={[
             {
               key: '/opciones',
-              icon: <SettingOutlined />,
+              icon: <SettingOutlined style={{ color: guindaColor }} />,
               label: 'Opciones',
             },
             {
               key: 'logout',
-              icon: <LogoutOutlined />,
+              icon: <LogoutOutlined style={{ color: guindaColor }} />,
               label: 'Cerrar sesión',
             },
           ]}

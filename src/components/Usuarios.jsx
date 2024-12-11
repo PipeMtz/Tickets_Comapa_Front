@@ -1,5 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Table, Button, Modal, Select, Form, Typography, Space, Row, Col } from 'antd';
+import {
+  Table,
+  Button,
+  Modal,
+  Select,
+  Form,
+  Typography,
+  Space,
+  Row,
+  Col,
+  ConfigProvider,
+} from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -13,6 +24,8 @@ const Usuarios = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [form] = Form.useForm();
+
+  const guindaColor = '#800000'; // Define el color guinda
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,55 +156,64 @@ const Usuarios = () => {
   ];
 
   return (
-    <div className="usuarios-container">
-      <h2>Lista de Usuarios</h2>
-      <Table
-        dataSource={usuarios}
-        columns={columns}
-        rowKey="id_usuario"
-        pagination={{ pageSize: 20 }}
-        bordered
-      />
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: guindaColor, // Cambia el color primario a guinda
+          colorLink: guindaColor,   // Cambia el color de los enlaces
+        },
+      }}
+    >
+      <div className="usuarios-container">
+        <h2>Lista de Usuarios</h2>
+        <Table
+          dataSource={usuarios}
+          columns={columns}
+          rowKey="id_usuario"
+          pagination={{ pageSize: 20 }}
+          bordered
+        />
 
-      <Modal
-        title="Editar Usuario"
-        visible={modalVisible}
-        onCancel={cerrarModal}
-        onOk={form.submit}
-        okText="Guardar"
-        cancelText="Cancelar"
-      >
-        <Form form={form} onFinish={actualizarUsuario} layout="vertical">
-          <Form.Item
-            label="Departamento"
-            name="nuevoDepartamento"
-            rules={[{ required: true, message: 'El departamento es obligatorio' }]}
-          >
-            <Select placeholder="Seleccione un departamento">
-              {departamentos.map((dep) => (
-                <Select.Option key={dep.nombre_departamento} value={dep.nombre_departamento}>
-                  {dep.nombre_departamento}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+        <Modal
+          title="Editar Usuario"
+          visible={modalVisible}
+          onCancel={cerrarModal}
+          onOk={form.submit}
+          okText="Guardar"
+          cancelText="Cancelar"
+        >
+          <Form form={form} onFinish={actualizarUsuario} layout="vertical">
+            <Form.Item
+              label="Departamento"
+              name="nuevoDepartamento"
+              rules={[{ required: true, message: 'El departamento es obligatorio' }]}
+            >
+              <Select placeholder="Seleccione un departamento">
+                {departamentos.map((dep) => (
+                  <Select.Option key={dep.nombre_departamento} value={dep.nombre_departamento}>
+                    {dep.nombre_departamento}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-          <Form.Item
-            label="Rol"
-            name="nuevoRol"
-            rules={[{ required: true, message: 'El rol es obligatorio' }]}
-          >
-            <Select placeholder="Seleccione un rol">
-              {roles.map((rol) => (
-                <Select.Option key={rol.nombre_rol} value={rol.nombre_rol}>
-                  {rol.nombre_rol}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+            <Form.Item
+              label="Rol"
+              name="nuevoRol"
+              rules={[{ required: true, message: 'El rol es obligatorio' }]}
+            >
+              <Select placeholder="Seleccione un rol">
+                {roles.map((rol) => (
+                  <Select.Option key={rol.nombre_rol} value={rol.nombre_rol}>
+                    {rol.nombre_rol}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
+    </ConfigProvider>
   );
 };
 

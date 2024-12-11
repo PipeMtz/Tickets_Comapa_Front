@@ -1,78 +1,133 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Button, Typography, message } from "antd";
+import axios from "axios";
+import comapaLogo from "../assets/comapalogo.png"; // Asegúrate de tener el logo en la carpeta 'assets'
+
+const { Title } = Typography;
 
 const Register = () => {
-  const [nombre, setNombre] = useState('');
-  const [email, setEmail] = useState('');
-  const [contrasena, setContrasena] = useState('');
-  //const [role, setRole] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [contrasena, setContrasena] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleRegister = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', {
+      const response = await axios.post("http://localhost:3000/api/auth/register", {
         nombre,
         email,
         contrasena,
-        role: 'Usuario',
+        role: "Usuario", // Rol predeterminado
       });
-      console.log('Usuario creado:', response.data);
-      setSuccessMessage('Usuario creado con éxito');
-      setErrorMessage('');
-      setTimeout(() => navigate('/dashboard'), 2000); // Redirige al dashboard después de 2 segundos
+      console.log("Usuario creado:", response.data);
+      message.success("Usuario creado con éxito. Redirigiendo...");
+      setTimeout(() => navigate("/dashboard"), 2000); // Redirigir después de 2 segundos
     } catch (error) {
-      console.error('Error al registrar:', error);
-      setErrorMessage('Error al crear el usuario. Inténtalo de nuevo.');
-      setSuccessMessage('');
+      console.error("Error al registrar:", error);
+      message.error("Error al crear el usuario. Inténtalo de nuevo.");
     }
   };
 
   const redirectToLogin = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
-    <div className="register-container">
-      <form onSubmit={handleRegister} className="register-form">
-        <h2>Registrar Nuevo Usuario</h2>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="register-input"
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="register-input"
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-          className="register-input"
-        />
-        {/* <input
-          type="text"
-          placeholder="Rol"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="register-input"
-        /> */}
-        <button type="submit" className="register-button">Registrar</button>
-        <button type="button" className="cancel-button" onClick={redirectToLogin}>Cancelar</button>
-      </form>
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "0 auto",
+        padding: "20px",
+        backgroundColor: "white", // Fondo blanco para todo
+      }}
+    >
+      <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        {/* Logo con fondo guinda */}
+        <div
+          style={{
+            backgroundColor: "#800000", // Fondo guinda
+            padding: "20px",
+            borderRadius: "8px",
+          }}
+        >
+          <img
+            src={comapaLogo}
+            alt="Comapa Logo"
+            style={{ maxWidth: "80%", height: "auto" }}
+          />
+        </div>
+      </div>
+      <Title level={3} style={{ textAlign: "center", marginBottom: "20px" }}>
+        Registrar Nuevo Usuario
+      </Title>
+      <Form
+        layout="vertical"
+        onFinish={handleRegister}
+        style={{ marginTop: "20px" }}
+      >
+        <Form.Item
+          label="Nombre"
+          rules={[{ required: true, message: "Por favor ingresa tu nombre." }]}
+        >
+          <Input
+            placeholder="Nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            style={{ borderRadius: "5px" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Correo Electrónico"
+          rules={[
+            { required: true, message: "Por favor ingresa tu correo electrónico." },
+            { type: "email", message: "Ingresa un correo electrónico válido." },
+          ]}
+        >
+          <Input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ borderRadius: "5px" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Contraseña"
+          rules={[
+            { required: true, message: "Por favor ingresa tu contraseña." },
+            { min: 6, message: "La contraseña debe tener al menos 6 caracteres." },
+          ]}
+        >
+          <Input.Password
+            placeholder="Contraseña"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            style={{ borderRadius: "5px" }}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            style={{
+              backgroundColor: "#b30000", // Color guinda más claro para el botón
+              borderColor: "#b30000", // Aseguramos que el borde también sea guinda
+              borderRadius: "5px",
+            }}
+          >
+            Registrar
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button type="default" onClick={redirectToLogin} block>
+            Cancelar
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

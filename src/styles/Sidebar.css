@@ -2,43 +2,64 @@
 
 /* Encabezado con el nombre de la app */
 .sidebar-header {
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .sidebar-header .ant-typography {
-    margin: 0;
-  }
-  
-  .sidebar-header .ant-typography.ant-typography-level-3 {
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .sidebar-header .ant-typography.ant-typography-level-4 {
-    font-size: 12px;
-    color: #888;
-  }
-  
-  /* Menú principal */
-  .ant-menu-inline {
-    height: calc(100% - 130px) !important; /* Deja espacio para el encabezado */
-  }
-  
-  .sidebar-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 0;
-    background: #fff;
-  }
-  
-  .sidebar-footer .ant-menu-item {
-    font-size: 14px;
-  }
-  
-  /* Ajuste a la altura de las opciones */
-  .sidebar-footer .ant-menu-item:last-child {
-    margin-bottom: 10px;
-  }
-  
+  padding: 20px;
+  text-align: center;
+  background-color: #800000; /* Color guinda para el encabezado */
+}
+
+.sidebar-header .ant-typography {
+  margin: 0;
+}
+
+.sidebar-header .ant-typography.ant-typography-level-3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: white; /* Color blanco para el título */
+}
+
+.sidebar-header .ant-typography.ant-typography-level-4 {
+  font-size: 12px;
+  color: white; /* Color blanco para el subtítulo */
+}
+
+/* Menú principal */
+.ant-menu-inline {
+  height: calc(100% - 130px) !important; /* Deja espacio para el encabezado */
+}
+
+.ant-menu-item {
+  color: #800000; /* Color guinda para los items del menú */
+}
+
+.ant-menu-item:hover {
+  background-color: #f0f0f0; /* Fondo claro en hover */
+  color: #800000; /* Color guinda al pasar el ratón */
+}
+.ant-menu-item-selected{
+  background-color: #f0f0f0; /* Fondo claro en hover */
+  color: #800000; /* Color guinda al pasar el ratón */
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0;
+  background: #fff;
+}
+
+.sidebar-footer .ant-menu-item {
+  font-size: 14px;
+  color: #800000; /* Color guinda para los items del footer */
+}
+
+.sidebar-footer .ant-menu-item:hover {
+  background-color: #f0f0f0; /* Fondo claro en hover */
+  color: #800000; /* Color guinda al pasar el ratón */
+}
+
+/* Ajuste a la altura de las opciones */
+.sidebar-footer .ant-menu-item:last-child {
+  margin-bottom: 10px;
+}

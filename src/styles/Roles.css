@@ -17,7 +17,7 @@
   .crear-rol button {
     padding: 8px 12px;
     font-size: 14px;
-    background-color: #313aee;
+    background-color: #800000;
     color: white;
     border: none;
     border-radius: 4px;
@@ -25,7 +25,7 @@
   }
   
   .crear-rol button:hover {
-    background-color: #242ec5;
+    background-color: #950000;
   }
   
   .roles-table {
