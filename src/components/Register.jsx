@@ -22,7 +22,7 @@ const Register = () => {
       });
       console.log("Usuario creado:", response.data);
       message.success("Usuario creado con éxito. Redirigiendo...");
-      setTimeout(() => navigate("/dashboard"), 2000); // Redirigir después de 2 segundos
+      setTimeout(() => navigate("/subir-tickets"), 2000); // Redirigir después de 2 segundos
     } catch (error) {
       console.error("Error al registrar:", error);
       message.error("Error al crear el usuario. Inténtalo de nuevo.");
@@ -30,7 +30,7 @@ const Register = () => {
   };
 
   const redirectToLogin = () => {
-    navigate("/");
+    navigate("/subir-tickets");
   };
 
   return (

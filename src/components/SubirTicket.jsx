@@ -1,19 +1,22 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Button, message, Upload, Input, Select, Form } from 'antd';
+import { Button, message, Upload, Input, Select, Form, Modal } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import '../styles/SubirTicket.css';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const SubirTicket = () => {
-  const [descripcion, setDescripcion] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [asunto, setAsunto] = useState('');
-  const [archivos, setArchivos] = useState([]);
-  const [tipos, setTipos] = useState([]); // Opciones de asuntos
-  const [loadingTipos, setLoadingTipos] = useState(false);
+  const SubirTicket = () => {
+    const navigate = useNavigate();
+    const [descripcion, setDescripcion] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [asunto, setAsunto] = useState('');
+    const [archivos, setArchivos] = useState([]);
+    const [tipos, setTipos] = useState([]); // Opciones de asuntos
+    const [loadingTipos, setLoadingTipos] = useState(false);
 
   useEffect(() => {
     const fetchTipos = async () => {
@@ -34,105 +37,111 @@ const SubirTicket = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!descripcion || !direccion || !asunto) {
-      message.error('Por favor completa todos los campos obligatorios');
-      return;
+        message.error('Por favor completa todos los campos obligatorios');
+        return;
     }
-  
+
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        message.error('Token no encontrado');
-        return;
-      }
-  
-      // Datos del ticket
-      const ticketData = {
-        descripcion,
-        direccion,
-        asunto,
-      };
-      console.log('Datos del ticket:', ticketData);
-  
-      // Enviar los datos del ticket
-      const ticketResponse = await axios.post('http://localhost:3000/api/tickets', ticketData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      // Obtener todos los tickets para buscar el ID del ticket recién creado
-      const ticketsResponse = await axios.get('http://localhost:3000/api/tickets', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      const tickets = ticketsResponse.data;
-      console.log('Tickets:', tickets);
-  
-      // Normalizar cadenas para comparación
-      const normalizeString = (str) => str.trim().toLowerCase();
-  
-      let idTicket = null;
-  
-      // Usar forEach para recorrer todos los tickets y encontrar el que coincida
-      tickets.forEach((ticket) => {
-        // console.log('Comparando:', {
-        //   descripcionBackend: normalizeString(ticket.descripcion),
-        //   descripcionFrontend: normalizeString(ticketData.descripcion),
-        //   direccionBackend: normalizeString(ticket.direccion),
-        //   direccionFrontend: normalizeString(ticketData.direccion)
-        // });
-  
-        if (
-          normalizeString(ticket.descripcion) === normalizeString(ticketData.descripcion) &&
-          normalizeString(ticket.direccion) === normalizeString(ticketData.direccion) 
-          // &&
-          // ticket.asunto === ticketData.asunto
-        ) {
-          idTicket = ticket.id_ticket;
+        const token = localStorage.getItem('token');
+        if (!token) {
+            message.error('Token no encontrado');
+            return;
         }
-      });
-  
-      if (!idTicket) {
-        message.error('No se pudo encontrar el ticket recién creado');
-        return;
-      }
-  
-      console.log('ID del ticket encontrado:', idTicket);
-  
-      // Subir archivos si hay archivos seleccionados
-      if (archivos.length > 0) {
-        for (let archivo of archivos) {
-          console.log('Subiendo archivo:', archivo);
-          const archivoFormData = new FormData();
-          archivoFormData.append('id_ticket', idTicket);
-          archivoFormData.append('nombre', archivo.name);
-          archivoFormData.append('tipo', archivo.type);
-          archivoFormData.append('base64', archivo); // El archivo binario
-  
-          await axios.post('http://localhost:3000/api/archivos/subir', archivoFormData, {
+
+        // Datos del ticket
+        const ticketData = {
+            descripcion,
+            direccion,
+            asunto,
+        };
+        console.log('Datos del ticket:', ticketData);
+
+        // Enviar los datos del ticket
+        const ticketResponse = await axios.post('http://localhost:3000/api/tickets', ticketData, {
             headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
-          });
+        });
+
+        // Obtener todos los tickets para buscar el ID del ticket recién creado
+        const ticketsResponse = await axios.get('http://localhost:3000/api/tickets', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const tickets = ticketsResponse.data;
+        console.log('Tickets:', tickets);
+
+        // Normalizar cadenas para comparación
+        const normalizeString = (str) => str.trim().toLowerCase();
+
+        let idTicket = null;
+
+        // Usar forEach para recorrer todos los tickets y encontrar el que coincida
+        tickets.forEach((ticket) => {
+            if (
+                normalizeString(ticket.descripcion) === normalizeString(ticketData.descripcion) &&
+                normalizeString(ticket.direccion) === normalizeString(ticketData.direccion)
+            ) {
+                idTicket = ticket.id_ticket;
+            }
+        });
+
+        if (!idTicket) {
+            message.error('No se pudo encontrar el ticket recién creado');
+            return;
         }
-      }
-  
-      message.success('Ticket enviado con éxito');
-      setDescripcion('');
-      setDireccion('');
-      setAsunto('');
-      setArchivos([]);
+
+        console.log('ID del ticket encontrado:', idTicket);
+
+        // Subir archivos si hay archivos seleccionados
+        if (archivos.length > 0) {
+            for (let archivo of archivos) {
+                console.log('Subiendo archivo:', archivo);
+                const archivoFormData = new FormData();
+                archivoFormData.append('id_ticket', idTicket);
+                archivoFormData.append('nombre', archivo.name);
+                archivoFormData.append('tipo', archivo.type);
+                archivoFormData.append('base64', archivo);
+
+                await axios.post('http://localhost:3000/api/archivos/subir', archivoFormData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            }
+        }
+
+        message.success('Ticket enviado con éxito');
+        setDescripcion('');
+        setDireccion('');
+        setAsunto('');
+        setArchivos([]);
+
+        // Mostrar modal para decidir acción siguiente
+        Modal.confirm({
+            title: 'Ticket enviado con éxito',
+            content: '¿Desea enviar otro ticket?',
+            okText: 'Sí',
+            cancelText: 'No',
+            onOk: () => {
+                console.log('Usuario decidió enviar otro ticket');
+            },
+            onCancel: () => {
+                navigate('/solicitudes_usuario');
+            },
+        });
     } catch (error) {
-      console.error('Error al enviar el ticket:', error);
-      message.error('Hubo un error al enviar el ticket');
+        console.error('Error al enviar el ticket:', error);
+        message.error('Hubo un error al enviar el ticket');
     }
-  };
+};
+
   
   
 

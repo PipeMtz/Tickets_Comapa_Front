@@ -1,22 +1,32 @@
-import { Layout, Menu, Typography, Spin } from 'antd';
+import { Layout, Menu, Typography, Spin, Modal, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { DashboardOutlined, FileTextOutlined, UserOutlined, BarChartOutlined, ApartmentOutlined, TeamOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { 
+  QuestionCircleOutlined,
+  DashboardOutlined,
+  FileTextOutlined,
+  UserOutlined,
+  BarChartOutlined,
+  ApartmentOutlined,
+  TeamOutlined,
+  LogoutOutlined
+} from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
 import '../styles/Sidebar.css';
 import comapaLogo from '../assets/comapalogo.png';
 
 const { Sider } = Layout;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState(null);
   const [loading, setLoading] = useState(true);
-  
-  // Obtener el id_usuario desde el token o del localStorage
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedKey, setSelectedKey] = useState('/dashboard'); // Estado para gestionar la clave seleccionada
+
   const token = localStorage.getItem('token');
-  const userId = token ? JSON.parse(atob(token.split('.')[1])).id_usuario : null; // Si el token contiene id_usuario
+  const userId = token ? JSON.parse(atob(token.split('.')[1])).id_usuario : null;
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -25,7 +35,7 @@ const Sidebar = () => {
           const response = await fetch(`/api/users/${userId}`);
           const data = await response.json();
           if (response.ok) {
-            setUserName(data.nombre); // Asignar el nombre del usuario
+            setUserName(data.nombre);
           } else {
             console.error('No se encontró el usuario');
           }
@@ -40,20 +50,26 @@ const Sidebar = () => {
   }, [userId]);
 
   const handleLogout = () => {
-    // Implementa la función para cerrar sesión
     navigate('/');
   };
 
-  const guindaColor = '#800000'; // Define el color guinda
+  const handleMenuClick = ({ key }) => {
+    if (key === 'ayuda') {
+      setIsModalVisible(true);
+    } else if (key === 'logout') {
+      handleLogout();
+    } else {
+      setSelectedKey(key); // Actualiza la clave seleccionada
+      navigate(key);
+    }
+  };
+
+  const guindaColor = '#800000';
 
   return (
     <Sider width={200} style={{ height: '100vh', background: '#fff' }}>
       <div className="sidebar-header" style={{ backgroundColor: guindaColor, padding: '16px' }}>
-        <img 
-          src={comapaLogo} 
-          alt="Comapa Logo" 
-          style={{ maxWidth: '100%', height: 'auto' }} 
-        />
+        <img src={comapaLogo} alt="Comapa Logo" style={{ maxWidth: '100%', height: 'auto' }} />
         {loading ? (
           <Spin tip="Cargando..." style={{ display: 'block', textAlign: 'center', marginTop: 10 }} />
         ) : (
@@ -65,19 +81,13 @@ const Sidebar = () => {
 
       <Menu
         mode="inline"
-        defaultSelectedKeys={['1']}
+        selectedKeys={[selectedKey]} // Vincula la selección al estado
         style={{
-          height: 'calc(100% - 130px)', 
+          height: 'calc(100% - 130px)',
           borderRight: 0,
-          backgroundColor: '#fff', // Fondo blanco para el menú
-        }} 
-        onClick={({ key }) => {
-          if (key === 'logout') {
-            handleLogout();
-          } else {
-            navigate(key);
-          }
+          backgroundColor: '#fff',
         }}
+        onClick={handleMenuClick}
         items={[
           {
             key: '/dashboard',
@@ -115,23 +125,18 @@ const Sidebar = () => {
       <div className="sidebar-footer" style={{ marginTop: 'auto' }}>
         <Menu
           mode="inline"
+          selectedKeys={[selectedKey]} // Vincula la selección al estado
           style={{
-            width: '100%', 
-            borderRight: 0, 
-            backgroundColor: '#fff', // Fondo blanco para el pie de página
+            width: '100%',
+            borderRight: 0,
+            backgroundColor: '#fff',
           }}
-          onClick={({ key }) => {
-            if (key === 'logout') {
-              handleLogout();
-            } else {
-              navigate(key);
-            }
-          }}
+          onClick={handleMenuClick}
           items={[
             {
-              key: '/opciones',
-              icon: <SettingOutlined style={{ color: guindaColor }} />,
-              label: 'Opciones',
+              key: 'ayuda',
+              icon: <QuestionCircleOutlined style={{ color: guindaColor }} />,
+              label: 'Ayuda',
             },
             {
               key: 'logout',
@@ -141,6 +146,23 @@ const Sidebar = () => {
           ]}
         />
       </div>
+
+      <Modal
+        title="Ayuda"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={[
+          <Button key="close" onClick={() => setIsModalVisible(false)}>
+            Cerrar
+          </Button>,
+        ]}
+      >
+        <p>Si necesitas soporte, envía un correo a:</p>
+        <p>
+          <a href="mailto:felipe.mtz.s@outlook.com">felipe.mtz.s@outlook.com</a>.
+        </p>
+        <p>Estaremos encantados de ayudarte.</p>
+      </Modal>
     </Sider>
   );
 };

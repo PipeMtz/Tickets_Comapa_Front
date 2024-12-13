@@ -10,6 +10,7 @@ import SubirTicket from './components/SubirTicket';
 import Usuarios from './components/Usuarios';
 import Departamentos from './components/Departamentos';
 import Roles from './components/Roles';
+import SidebarUser from './components/SidebarUser';
 // import './index.css';
 
 function App() {
@@ -62,9 +63,23 @@ function App() {
           path="/subir-tickets"
           element={
             <div className="app-container">
-              <Sidebar />
+              {/* <Sidebar /> */}
+              <SidebarUser />
               <main className="main-content">
                 <SubirTicket />
+              </main>
+            </div>
+          }
+        />
+        {/* Sidebar usuario y su solicitudes */}
+        <Route
+          path="/solicitudes_usuario"
+          element={
+            <div className="app-container">
+              {/* <Sidebar /> */}
+              <SidebarUser />
+              <main className="main-content">
+                <Tickets />
               </main>
             </div>
           }
@@ -110,6 +125,17 @@ function App() {
         {/* Ruta para Opciones */}
         <Route
           path="/opciones"
+          element={
+            <div className="app-container">
+              <Sidebar />
+              <main className="main-content">
+                <Opciones />
+              </main>
+            </div>
+          }
+        />
+        <Route
+          path="/ayuda"
           element={
             <div className="app-container">
               <Sidebar />

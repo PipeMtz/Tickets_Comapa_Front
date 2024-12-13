@@ -16,20 +16,54 @@ const Login = () => {
   const handleLogin = async (values) => {
     setLoading(true);
     setErrorMessage('');
+  
     try {
+      // Iniciar sesión y obtener el token
       const response = await axios.post('http://localhost:3000/api/auth/login', values);
       const token = response.data.token;
+  
       console.log('Token:', token);
       localStorage.setItem('token', token);
-
-      navigate('/dashboard');
+  
+      // Decodificar el token para obtener el id_usuario
+      let payload;
+      try {
+        payload = JSON.parse(atob(token.split('.')[1]));
+      } catch (e) {
+        console.error('Error al decodificar el token:', e);
+        setErrorMessage('Hubo un problema con el inicio de sesión. Inténtalo de nuevo.');
+        return;
+      }
+  
+      const { id_usuario } = payload;
+  
+      if (!id_usuario) {
+        console.error('El token no contiene un id_usuario válido.');
+        setErrorMessage('No se pudo obtener el usuario. Inténtalo de nuevo.');
+        return;
+      }
+  
+      // Consultar GetUserById con el id_usuario
+      const userResponse = await axios.get(`http://localhost:3000/api/users/${id_usuario}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      const { id_rol } = userResponse.data;
+  
+      // Redirigir según el id_rol
+      if (id_rol === 1 || id_rol === 2) {
+        navigate('/dashboard');
+      } else {
+        navigate('/solicitudes_usuario');
+      }
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-      setErrorMessage('Credenciales incorrectas. Inténtalo de nuevo.');
+      console.error('Error en el proceso de inicio de sesión:', error);
+      setErrorMessage('Credenciales incorrectas o problema con la conexión. Inténtalo de nuevo.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   const redirectToRegister = () => {
     navigate('/registro');

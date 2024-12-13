@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Table, Button, Dropdown, Menu, Select, DatePicker, Form, Row, Col, message, Modal } from 'antd';
 import axios from 'axios';
@@ -29,34 +30,31 @@ const Tickets = () => {
 
   const fetchTickets = async () => {
     try {
-      // Obtener el token del almacenamiento local
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No se encontró el token. Inicia sesión nuevamente.');
-      }
+      if (!token) throw new Error('No se encontró el token. Inicia sesión nuevamente.');
   
-      // Decodificar el token para obtener el id_usuario
       const payload = JSON.parse(atob(token.split('.')[1]));
       const userId = payload.id_usuario;
-  
-      // Hacer una solicitud a /api/users para obtener los datos del usuario
+      
       const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`);
+      //console.log('userResponse:', userResponse);
       const { id_rol } = userResponse.data;
-  
-      // Decidir qué endpoint llamar según el id_rol
-      const endpoint =
-        id_rol === 1 || id_rol === 2
-          ? 'http://localhost:3000/api/tickets'
+      
+
+      const endpoint = 
+        id_rol === 1 || id_rol === 2 
+          ? 'http://localhost:3000/api/tickets' 
           : `http://localhost:3000/api/tickets/usuario/${userId}`;
   
-      // Hacer la solicitud al endpoint seleccionado
       const ticketsResponse = await axios.get(endpoint);
+      console.log('ticketsResponse:', ticketsResponse);
       setTickets(ticketsResponse.data);
     } catch (error) {
       console.error('Error fetching tickets:', error);
       message.error('No se pudieron cargar las solicitudes.');
     }
   };
+  
   
 
   const fetchUsers = async () => {
